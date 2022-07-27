@@ -1,0 +1,9 @@
+.card{
+  margin-top: 2rem;
+  width: 18rem;
+  cursor: grab;
+}
+
+.card--imageOverlay{
+  position: relative;
+}
