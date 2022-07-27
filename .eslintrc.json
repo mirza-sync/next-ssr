@@ -4,8 +4,8 @@
         "es2021": true
     },
     "extends": [
-        "eslint:recommended",
-        "plugin:react/recommended"
+        "plugin:react/recommended",
+        "eslint:recommended"
     ],
     "parserOptions": {
         "ecmaFeatures": {
@@ -18,6 +18,9 @@
         "react"
     ],
     "rules": {
+        "no-unused-vars": "warn",
+        "react/prop-types": "off",
         "react/react-in-jsx-scope": "off",
+        "react/display-name": "off"
     }
 }

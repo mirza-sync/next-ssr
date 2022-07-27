@@ -1,17 +1,8 @@
 import Head from 'next/head'
-import Image from 'next/image'
 import style from 'styles/Home.module.css'
-import Button from 'react-bootstrap/Button';
-import Link from 'next/link'
-import { useRouter } from 'next/router';
+import Example from 'pages/example/index';
 
 export default function Home() {
-  const router = useRouter()
-
-  const handleReroute = (url) =>{
-    router.push(url)
-  } 
-
   return (
     <div>
       <Head>
@@ -21,9 +12,7 @@ export default function Home() {
       </Head>
 
       <main className={style.main}>
-        <Button onClick={() =>handleReroute("csr")} className={style["main--buttons"]}>CSR Example</Button>
-        <Button onClick={() =>handleReroute("ssr")} className={style["main--buttons"]}>SSR Example</Button>
-        <Button onClick={() =>handleReroute("ssg")} className={style["main--buttons"]}>SSG Example</Button>
+        <Example/>
       </main>
     </div>
   )
