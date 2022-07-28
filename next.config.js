@@ -10,6 +10,7 @@ const nextConfig = {
     dest: 'public'
   },
   images: {
+    //Change domain as necessary
     domains: ['picsum.photos'],
   },
 }

@@ -20,6 +20,9 @@ export default function FilmCard({ film }){
           width={500}
           height={500}
           loading="lazy"
+          style={{
+            borderRadius: "10px 10px 0 0"
+          }}
         />
       </div>
       <Card.Body>

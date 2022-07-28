@@ -13,6 +13,9 @@ export default function PeopleCard({ people }){
           width={500}
           height={500}
           loading="lazy"
+          style={{
+            borderRadius: "6px 6px 0 0"
+          }}
         />
       </div>
       <Card.Body>

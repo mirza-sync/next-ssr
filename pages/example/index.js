@@ -8,6 +8,7 @@ export default function Example(){
   const handleReroute = (url) =>{
     router.push(url)
   } 
+  // https://stackoverflow.com/questions/51928722/how-to-override-bootstrap-theme-colors-in-bootstrapped-react-redux-app
 
   return(
     <>
