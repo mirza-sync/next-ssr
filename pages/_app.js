@@ -11,6 +11,10 @@ import { useEffect, useState } from 'react';
 import { lightTheme, darkTheme, GlobalStyles } from "constants/theme.js" 
 import Button from 'react-bootstrap/button'
 
+import { persistor, store } from 'redux/store';
+import { PersistGate } from 'redux-persist/integration/react';
+import { Provider } from 'react-redux';
+
 function MyApp({ Component, pageProps }) {
   const apolloClient = useApollo(pageProps)
   const [theme, setTheme] = useState("light") 
@@ -27,19 +31,21 @@ function MyApp({ Component, pageProps }) {
   }
 
   return (
-    <div>
-      <ApolloProvider client={apolloClient}>
-        <PWAMeta/>
-        <SSRProvider>
-          <NextNProgress/>
-          <ThemeProvider  theme={theme == 'light' ? lightTheme : darkTheme}>
-            <GlobalStyles/>
-            <Button onClick={toggleTheme}>Switch Theme</Button>
-            <Component {...pageProps} />
-          </ThemeProvider>
-        </SSRProvider>
-      </ApolloProvider>
-    </div>
+    <Provider store={store}>
+      <PersistGate loading={null} persistor={persistor}>
+        <ApolloProvider client={apolloClient}>
+          <PWAMeta/>
+          <SSRProvider>
+            <NextNProgress/>
+            <ThemeProvider  theme={theme == 'light' ? lightTheme : darkTheme}>
+              <GlobalStyles/>
+              <Button onClick={toggleTheme}>Switch Theme</Button>
+              <Component {...pageProps} />
+            </ThemeProvider>
+          </SSRProvider>
+        </ApolloProvider>
+      </PersistGate>
+    </Provider>
   )
 }
 
