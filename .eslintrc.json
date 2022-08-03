@@ -24,6 +24,7 @@
         "react/display-name": "off"
     },
     "globals": {
-        "process": true
+        "process": true,
+        "require": true
     }
 }

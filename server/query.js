@@ -53,3 +53,13 @@ query allPeople{
   }
 }
 `
+
+export const GET_RAKITA_USER_DETAILS = gql`
+query getMyDetails{
+	me{
+    firstName
+    lastName
+    profilePicture
+  }
+}
+`

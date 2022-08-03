@@ -9,11 +9,12 @@ import { ThemeProvider } from 'styled-components';
 import { useEffect, useState } from 'react';
 
 import { lightTheme, darkTheme, GlobalStyles } from "constants/theme.js" 
-import Button from 'react-bootstrap/button'
+import Button from 'react-bootstrap/Button'
 
 import { persistor, store } from 'redux/store';
 import { PersistGate } from 'redux-persist/integration/react';
 import { Provider } from 'react-redux';
+// import Layout from 'components/PerPageLayout';
 
 function MyApp({ Component, pageProps }) {
   const apolloClient = useApollo(pageProps)
@@ -30,6 +31,8 @@ function MyApp({ Component, pageProps }) {
     localStorage.setItem('theme', nextTheme)
   }
 
+  const getLayout = Component.getLayout || ((page) => page)
+
   return (
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
@@ -40,7 +43,7 @@ function MyApp({ Component, pageProps }) {
             <ThemeProvider  theme={theme == 'light' ? lightTheme : darkTheme}>
               <GlobalStyles/>
               <Button onClick={toggleTheme}>Switch Theme</Button>
-              <Component {...pageProps} />
+              {getLayout(<Component {...pageProps} />)}
             </ThemeProvider>
           </SSRProvider>
         </ApolloProvider>
