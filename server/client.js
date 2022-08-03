@@ -1,10 +1,11 @@
 import {useMemo} from 'react'
-import {ApolloClient, gql, InMemoryCache} from '@apollo/client'
+import {ApolloClient, ApolloLink, InMemoryCache} from '@apollo/client'
 import { setContext } from 'apollo-link-context';
 import merge from 'deepmerge'
 // import {cache} from './cache'
 import { isSSR } from 'constants/utils'
 import isEqual from 'lodash/isEqual'
+import { store } from 'redux/store'
 
 export const APOLLO_STATE_PROP_NAME = '__APOLLO_STATE__'
 
@@ -14,22 +15,43 @@ const authLink = setContext((_, { headers }) => {
   // get the authentication token from local storage if it exists
   let token = null
   if(!isSSR()){
-    token = localStorage.getItem('token');
+    //Depending on your use-case, if you're using redux or purely localstorage
+    token = store.getState().user.token
+    // token = localStorage.getItem('token');
   }
   // return the headers to the context so httpLink can read them
   return {
     headers: {
       ...headers,
-      authorization: token ? `Bearer ${token}` : "",
+      //Initial JWT string for rakita
+      authorization: token ? `JWT ${token}` : "",
     }
   }
 });
 
 function createIsomorphLink() {
-    const { HttpLink } = require('@apollo/client/link/http')
-    return new HttpLink({
-      uri: process.env.NEXT_PUBLIC_GRAPHQL_URI,
-    })
+  //Change this function as necessary
+  const { HttpLink } = require('@apollo/client/link/http')  
+
+  const defaultGraphqlUrl = new HttpLink({
+    uri:  process.env.NEXT_PUBLIC_GRAPHQL_URI,
+  });
+  
+  // Create Second Link
+  const rakitaUrl = new HttpLink({
+    uri: process.env.NEXT_PUBLIC_RAKITA_GRAPHQL_URI,
+  });
+
+  /*
+  * By default, the defaultGraphqlURL will be used 
+  * until you specify an operation name in useQuery or useMutation. 
+  * An example can be seen in layoutNlogin page
+  */
+  return ApolloLink.split(
+    operation => operation.getContext().clientName === "rakita", // Routes the query to the proper client
+    rakitaUrl,
+    defaultGraphqlUrl
+  )
 }
 
 function createApolloClient() {
@@ -42,7 +64,7 @@ function createApolloClient() {
       query: {
         fetchPolicy: isSSR() ? 'no-cache' : 'cache-and-network',
         errorPolicy: 'all',
-      }
+      },
   })
 }
 
