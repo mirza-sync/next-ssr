@@ -8,7 +8,8 @@ import { LOGIN_RAKITA_USER } from "server/mutation";
 import { insertToken, clearUser } from 'redux/slices/userSlice'
 import { useDispatch, useSelector } from "react-redux";
 import { RakitaOptions } from "constants/utils";
-
+import { setCookie, deleteCookie } from 'cookies-next';
+import { useRouter } from "next/router";
 
 LayoutAndLoginExample.getLayout = function getLayout(page) {
   return (<Layout>{page}</Layout>)
@@ -28,9 +29,9 @@ const  loginReducer = (state, action) => {
 
 export default function LayoutAndLoginExample(){
   const [loginRakitaUserFunc, { data, loading, error }] = useMutation(LOGIN_RAKITA_USER, RakitaOptions);
-  const { token, firstName, profileImgSrc } = useSelector((state) => state.user)
-
+  const { token } = useSelector((state) => state.user)
   const dispatch = useDispatch()
+  const router = useRouter()
   /*
   * A useState will be fine in this form use-case
   * however, this is more of a scalable solution and a simple starter
@@ -40,6 +41,7 @@ export default function LayoutAndLoginExample(){
   useEffect(() =>{
     if(data){
       dispatch(insertToken(data.tokenAuth.token))
+      setCookie('token', data.tokenAuth.token)
     }
   }, [data])
 
@@ -60,6 +62,7 @@ export default function LayoutAndLoginExample(){
   const handleLogout = () =>{
     console.log('log out')
     dispatch(clearUser())
+    deleteCookie('token')
   }
 
   return(
@@ -74,9 +77,12 @@ export default function LayoutAndLoginExample(){
           handleLogout={handleLogout}
         />
       }
-      <Button style={{ marginTop:"5rem" }}>
-        Test Server Side Redirect
-      </Button>
+      <div style={{ marginTop:"5rem" }}>
+        <p>Will redirect back to this page if you don&apos;t have a valid JWT token</p>
+        <Button onClick={() => router.push(`${router.asPath}/redirect`)}>
+          Test Server Side Redirect
+        </Button>
+      </div>
     </div>
   )
 }
