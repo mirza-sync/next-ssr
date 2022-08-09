@@ -11,21 +11,8 @@ import { RakitaOptions } from 'constants/utils';
 import { insertToken, insertUserDetails } from 'redux/slices/userSlice'
 
 export default function Header(){
-  const [getRakitaUserDetailFunc, { loading, error, data }] = useLazyQuery(GET_RAKITA_USER_DETAILS, RakitaOptions);
-
   const router = useRouter()
-  const { token, firstName, profileImgSrc } = useSelector((state) => state.user)
-  const dispatch = useDispatch()
-
-  useEffect(() =>{
-    if(token !== '' && !data && firstName === ''){
-      getRakitaUserDetailFunc()
-    }
-
-    if(token !== '' && data){
-      dispatch(insertUserDetails({ firstName: data.me.firstName, profileImgSrc: data.me.profilePicture}))
-    }
-  }, [token, data])
+  const { firstName, profileImgSrc } = useSelector((state) => state.user)
 
   return(
     <Navbar bg="light">
