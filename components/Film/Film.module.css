@@ -1,0 +1,21 @@
+.film{
+  padding: 2rem 8rem;
+}
+
+.film--backButton{
+  width: 15rem;
+}
+
+.film--body{
+  padding: 2rem 20rem;
+}
+
+.film--openingCrawl{
+  margin: 3rem 0;
+}
+
+.film--characters{
+  font-weight: bold;
+  font-size: 20px;
+  margin: 1rem 0;
+}
