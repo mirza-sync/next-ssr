@@ -3,13 +3,14 @@ import styles from "styles/layoutNlogin.module.css"
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import { useEffect, useReducer } from "react";
-import { useMutation } from "@apollo/client";
+import { useLazyQuery, useMutation } from "@apollo/client";
 import { LOGIN_RAKITA_USER } from "server/mutation";
-import { insertToken, clearUser } from 'redux/slices/userSlice'
+import { insertToken, clearUser, insertUserDetails } from 'redux/slices/userSlice'
 import { useDispatch, useSelector } from "react-redux";
 import { RakitaOptions } from "constants/utils";
 import { setCookie, deleteCookie } from 'cookies-next';
 import { useRouter } from "next/router";
+import { GET_RAKITA_USER_DETAILS } from "server/query";
 
 LayoutAndLoginExample.getLayout = function getLayout(page) {
   return (<Layout>{page}</Layout>)
@@ -28,7 +29,8 @@ const  loginReducer = (state, action) => {
 }
 
 export default function LayoutAndLoginExample(){
-  const [loginRakitaUserFunc, { data, loading, error }] = useMutation(LOGIN_RAKITA_USER, RakitaOptions);
+  const [loginRakitaUserFunc, { client }] = useMutation(LOGIN_RAKITA_USER, RakitaOptions);
+  const [getRakitaUserDetailFunc, { error } ] = useLazyQuery(GET_RAKITA_USER_DETAILS, {...RakitaOptions, errorPolicy: "all" });
   const { token } = useSelector((state) => state.user)
   const dispatch = useDispatch()
   const router = useRouter()
@@ -37,13 +39,6 @@ export default function LayoutAndLoginExample(){
   * however, this is more of a scalable solution and a simple starter
   */
   const [loginFormState, loginFormDispatch] = useReducer(loginReducer, { username: "", password:"" });
-
-  useEffect(() =>{
-    if(data){
-      dispatch(insertToken(data.tokenAuth.token))
-      setCookie('token', data.tokenAuth.token)
-    }
-  }, [data])
 
   const handleFormInput = (e) =>{
     loginFormDispatch({
@@ -57,13 +52,24 @@ export default function LayoutAndLoginExample(){
     e.preventDefault()
     //Context is to set the the graphql url to rakita since the default is a swapi.api
     loginRakitaUserFunc({variables: { ...loginFormState }})
+      .then((res) =>{
+        const { token } = res.data.tokenAuth
+        dispatch(insertToken(token))
+        setCookie('token',token)
+
+        getRakitaUserDetailFunc().then((res) =>{
+          const { firstName, profilePicture } = res.data.me
+          dispatch(insertUserDetails({ firstName: firstName, profileImgSrc: profilePicture }))
+        })
+      })
   }
 
   const handleLogout = () =>{
-    console.log('log out')
     dispatch(clearUser())
     deleteCookie('token')
   }
+
+  if(error){ console.log(error) }
 
   return(
     <div className={styles.container}>
