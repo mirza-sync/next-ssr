@@ -1,8 +1,35 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app)
+
 
 ## Getting Started
 
-First, run the development server:
+### Project Requirements:
+```bash
+npm version: >= 7 .0
+node version: >= 16.0
+```
+
+### First, to install dependency:
+
+
+```bash
+npm ci
+# or
+yarn install --frozen-lockfile
+```
+### OR
+
+```bash
+npm i
+# or
+yarn install
+```
+
+Use `npm install` to add new dependencies, and to update dependencies on a project. Usually, you would use it during development after pulling changes that update the list of dependencies but it may be a good idea to use npm ci in this case.
+
+Use `npm ci` if you need a deterministic, repeatable build. For example during continuous integration, automated jobs, etc. and when installing dependencies for the first time, instead of npm install.
+
+### Secondly, run the development server:
 
 ```bash
 npm run dev
@@ -12,11 +39,15 @@ yarn dev
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `pages/index.js`. The page auto-updates as you edit the file.
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.js`.
+## Additional Notes
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+- PWA: This project is PWA compatible, you just have to include relevant icons in `PWA.js` to enable PWA
+- Redux-Toolkit & Redux persist: This project uses `Redux-Toolkit` ( Not `Redux`! ), `Redux-Toolkit` is a modern implementation and contains different methods of code implementation. An example for Redux-persist is on `/example/login` page and `/redux` to test the storage of JWT token from Rakita 
+- Cookies: A simple redirection using SSR example can be found in `/example/login`. 
+- Global theming: Can be styled under `/constants/theme.js` and applied in `app.js`. Current method of storage for global theming is in `Local Storage`
+- GraphQL: Using `@apollo/client` and configured for NextJS. Can configure header and multiple http links in `server/client.js`
+- Sitemap: Sitemap.xml is dynamically generated under `/pages/sitemap.xml.js` to allow SEO crawlers to know which URL to crawl
 
 ## Learn More
 
