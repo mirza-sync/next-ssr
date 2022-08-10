@@ -18,6 +18,7 @@ export default function Example(){
       <Button onClick={() =>handleReroute("example/ssg")} className={style["main--buttons"]}>NextJs SSG Example</Button>
       <Button onClick={() =>handleReroute("example/redux")} className={style["main--buttons"]}>Redux Persistance Ex</Button>
       <Button onClick={() =>handleReroute("example/layoutNlogin")} className={style["main--buttons"]}>Layout and Login Ex</Button>
+      <h1>Cool Stuff</h1>
     </>
   )
 }
