@@ -12,7 +12,7 @@ export default function Example(){
 
   return(
     <>
-      <h1>Example</h1>
+      <h1>What&apos;s Next</h1>
       <Button onClick={() =>handleReroute("example/csr")} className={style["main--buttons"]}>NextJs CSR Example</Button>
       <Button onClick={() =>handleReroute("example/ssr")} className={style["main--buttons"]}>NextJs SSR Example</Button>
       <Button onClick={() =>handleReroute("example/ssg")} className={style["main--buttons"]}>NextJs SSG Example</Button>
